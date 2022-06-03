@@ -50,7 +50,7 @@ class ArduinoKeyboard {
     KeyReport _report;
 };
 
-extern ArduinoKeyboard Keyboard;
+extern ArduinoKeyboard _keyboard;
 
 #endif
 #endif

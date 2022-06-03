@@ -19,7 +19,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "Keyboard.hpp"
+#include "ArduinoKeyboard.hpp"
 
 #ifdef _USING_HID
 
@@ -126,6 +126,6 @@ void ArduinoKeyboard::sendReport() {
     HID().SendReport(2, _report, sizeof(KeyReport));
 }
 
-ArduinoKeyboard Keyboard;
+ArduinoKeyboard _keyboard;
 
 #endif
