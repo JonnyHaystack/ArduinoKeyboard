@@ -30,6 +30,8 @@
 
 #else
 
+#include "keycodes.h"
+
 // Low level key report: up to 6 keys and shift, ctrl etc at once
 typedef struct {
     uint8_t modifiers;
