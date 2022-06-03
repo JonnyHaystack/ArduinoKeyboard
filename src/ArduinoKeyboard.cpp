@@ -56,13 +56,13 @@ static const uint8_t _hidReportDescriptor[] PROGMEM = {
     0xc0, // END_COLLECTION
 };
 
-Keyboard_::Keyboard_() {
+ArduinoKeyboard::ArduinoKeyboard() {
     static HIDSubDescriptor node(_hidReportDescriptor, sizeof(_hidReportDescriptor));
     HID().AppendDescriptor(&node);
     releaseAll();
 }
 
-void Keyboard_::press(uint8_t keycode) {
+void ArduinoKeyboard::press(uint8_t keycode) {
     // If keycode >= E0 then it's a modifier key.
     if (keycode >= 0xE0) {
         // Create bitmask from the modifier keycode to set the corresponding bit in the modifier
@@ -89,7 +89,7 @@ void Keyboard_::press(uint8_t keycode) {
     }
 }
 
-void Keyboard_::release(uint8_t keycode) {
+void ArduinoKeyboard::release(uint8_t keycode) {
     // If keycode >= E0 then it's a modifier key.
     if (keycode >= 0xE0) {
         // Create bitmask from the modifier keycode to unset the corresponding bit in the modifier
@@ -107,7 +107,7 @@ void Keyboard_::release(uint8_t keycode) {
     }
 }
 
-void setPressed(uint8_t keycode, bool pressed) {
+void ArduinoKeyboard::setPressed(uint8_t keycode, bool pressed) {
     if (pressed) {
         press(keycode);
     } else {
@@ -115,17 +115,17 @@ void setPressed(uint8_t keycode, bool pressed) {
     }
 }
 
-void Keyboard_::releaseAll() {
+void ArduinoKeyboard::releaseAll() {
     for (int i = 0; i < 6; i++) {
         _report.keys[i] = 0;
     }
     _report.modifiers = 0;
 }
 
-void Keyboard_::sendReport() {
+void ArduinoKeyboard::sendReport() {
     HID().SendReport(2, _report, sizeof(KeyReport));
 }
 
-Keyboard_ Keyboard;
+ArduinoKeyboard Keyboard;
 
 #endif

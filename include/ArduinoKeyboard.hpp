@@ -37,9 +37,9 @@ typedef struct {
     uint8_t keys[6];
 } KeyReport;
 
-class Keyboard_ : public Print {
+class ArduinoKeyboard {
   public:
-    Keyboard_();
+    ArduinoKeyboard();
     void press(uint8_t keycode);
     void release(uint8_t keycode);
     void setPressed(uint8_t keycode, bool pressed);
@@ -50,7 +50,7 @@ class Keyboard_ : public Print {
     KeyReport _report;
 };
 
-extern Keyboard_ Keyboard;
+extern ArduinoKeyboard Keyboard;
 
 #endif
 #endif
