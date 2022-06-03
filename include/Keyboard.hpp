@@ -1,7 +1,8 @@
 /*
-  Keyboard_es_ES.h
+  Keyboard.h
 
-  Copyright (c) 2022, Edgar Bonet
+  Copyright (c) 2015, Arduino LLC
+  Original code (pre-library): Copyright (c) 2011, Peter Barrett
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -18,28 +19,38 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef KEYBOARD_ES_ES_h
-#define KEYBOARD_ES_ES_h
+#ifndef KEYBOARD_h
+#define KEYBOARD_h
 
 #include "HID.h"
 
-#if !defined(_USING_HID)
+#ifndef _USING_HID
 
 #warning "Using legacy HID core (non pluggable)"
 
 #else
 
-//================================================================================
-//================================================================================
-//  Keyboard
+// Low level key report: up to 6 keys and shift, ctrl etc at once
+typedef struct {
+    uint8_t modifiers;
+    uint8_t reserved;
+    uint8_t keys[6];
+} KeyReport;
 
-// es_ES keys
-#define KEY_MASCULINE_ORDINAL    (136+0x35)
-#define KEY_INVERTED_EXCLAMATION (136+0x2e)
-#define KEY_GRAVE                (136+0x2f)
-#define KEY_N_TILDE              (136+0x33)
-#define KEY_ACUTE                (136+0x34)
-#define KEY_C_CEDILLA            (136+0x31)
+class Keyboard_ : public Print {
+  public:
+    Keyboard_();
+    void press(uint8_t keycode);
+    void release(uint8_t keycode);
+    void setPressed(uint8_t keycode, bool pressed);
+    void releaseAll();
+
+  private:
+    KeyReport _keyReport;
+    void sendReport(KeyReport *keys);
+};
+
+extern Keyboard_ Keyboard;
 
 #endif
 #endif
