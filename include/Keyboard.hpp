@@ -44,10 +44,10 @@ class Keyboard_ : public Print {
     void release(uint8_t keycode);
     void setPressed(uint8_t keycode, bool pressed);
     void releaseAll();
+    void sendReport();
 
   private:
-    KeyReport _keyReport;
-    void sendReport(KeyReport *keys);
+    KeyReport _report;
 };
 
 extern Keyboard_ Keyboard;

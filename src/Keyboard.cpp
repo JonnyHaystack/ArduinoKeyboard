@@ -62,10 +62,6 @@ Keyboard_::Keyboard_() {
     releaseAll();
 }
 
-void Keyboard_::sendReport(KeyReport *keys) {
-    HID().SendReport(2, keys, sizeof(KeyReport));
-}
-
 void Keyboard_::press(uint8_t keycode) {
     // If keycode >= E0 then it's a modifier key.
     if (keycode >= 0xE0) {
@@ -79,15 +75,15 @@ void Keyboard_::press(uint8_t keycode) {
     // Check if the key is already pressed so that we don't send the same keycode multiple times in
     // the same report.
     for (int i = 0; i < 6; i++) {
-        if (_report.keycode[i] == keycode) {
+        if (_report.keys[i] == keycode) {
             return;
         }
     }
 
     // Place this keycode in the report in place of the first empty keycode.
     for (int i = 0; i < 6; i++) {
-        if (_report.keycode[i] == HID_KEY_NONE) {
-            _report.keycode[i] = keycode;
+        if (_report.keys[i] == HID_KEY_NONE) {
+            _report.keys[i] = keycode;
             return;
         }
     }
@@ -105,8 +101,8 @@ void Keyboard_::release(uint8_t keycode) {
 
     // Loop through keycodes in report. If we find the specified key code, we clear it.
     for (int i = 0; i < 6; i++) {
-        if (_report.keycode[i] == keycode) {
-            _report.keycode[i] = HID_KEY_NONE;
+        if (_report.keys[i] == keycode) {
+            _report.keys[i] = HID_KEY_NONE;
         }
     }
 }
@@ -121,9 +117,13 @@ void setPressed(uint8_t keycode, bool pressed) {
 
 void Keyboard_::releaseAll() {
     for (int i = 0; i < 6; i++) {
-        _keyReport.keys[i] = 0;
+        _report.keys[i] = 0;
     }
-    _keyReport.modifiers = 0;
+    _report.modifiers = 0;
+}
+
+void Keyboard_::sendReport() {
+    HID().SendReport(2, _report, sizeof(KeyReport));
 }
 
 Keyboard_ Keyboard;
