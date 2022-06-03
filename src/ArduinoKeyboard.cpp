@@ -23,6 +23,8 @@
 
 #ifdef _USING_HID
 
+#define MODIFIER_MASK(mod_kc) (1 << (mod_kc & 0x0F))
+
 static const uint8_t _hidReportDescriptor[] PROGMEM = {
 
     // Keyboard
@@ -68,7 +70,7 @@ void ArduinoKeyboard::press(uint8_t keycode) {
         // Create bitmask from the modifier keycode to set the corresponding bit in the modifier
         // byte.
         uint8_t bitmask = MODIFIER_MASK(keycode);
-        _report.modifier |= bitmask;
+        _report.modifiers |= bitmask;
         return;
     }
 
@@ -95,7 +97,7 @@ void ArduinoKeyboard::release(uint8_t keycode) {
         // Create bitmask from the modifier keycode to unset the corresponding bit in the modifier
         // byte.
         uint8_t bitmask = ~MODIFIER_MASK(keycode);
-        _report.modifier &= bitmask;
+        _report.modifiers &= bitmask;
         return;
     }
 
@@ -123,7 +125,7 @@ void ArduinoKeyboard::releaseAll() {
 }
 
 void ArduinoKeyboard::sendReport() {
-    HID().SendReport(2, _report, sizeof(KeyReport));
+    HID().SendReport(2, &_report, sizeof(KeyReport));
 }
 
 ArduinoKeyboard _keyboard;
